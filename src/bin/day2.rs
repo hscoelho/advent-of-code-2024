@@ -26,13 +26,16 @@ fn parse(input: &str) -> Vec<Vec<i32>> {
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Direction {
-    Unknown,
     Increasing,
     Decreasing,
 }
 
 fn is_safe(report: &[i32]) -> bool {
-    let mut direction = Direction::Unknown;
+    let direction = if report[1] > report[0] {
+        Direction::Increasing
+    } else {
+        Direction::Decreasing
+    };
     for window in report.windows(2) {
         let (a, b) = (window[0], window[1]);
         let diff = b - a;
@@ -40,15 +43,11 @@ fn is_safe(report: &[i32]) -> bool {
             return false;
         }
 
-        let curr_direction = if diff > 0 {
+        let curr_direction = if b > a {
             Direction::Increasing
         } else {
             Direction::Decreasing
         };
-
-        if matches!(direction, Direction::Unknown) {
-            direction = curr_direction;
-        }
 
         if direction != curr_direction {
             return false;
