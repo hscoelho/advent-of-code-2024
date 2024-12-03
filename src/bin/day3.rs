@@ -16,16 +16,8 @@ fn solve_part1(input: &str) -> i32 {
 
 fn solve_part2(input: &str) -> i32 {
     input
-        .split("don't")
-        .enumerate()
-        .flat_map(|(i, part)| {
-            if i == 0 {
-                vec![part]
-            } else {
-                part.split("do").skip(1).collect()
-            }
-        })
-        .filter(|line| !line.starts_with("don't"))
+        .split("do()")
+        .map(|a| a.split("don't()").next().unwrap_or(""))
         .map(do_mul)
         .sum()
 }
