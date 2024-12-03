@@ -1,5 +1,5 @@
 use regex::Regex;
-use regex_split::RegexSplit;
+
 fn main() {
     assert_eq!(solve_part1(TEST_INPUT_PART1), 161);
     let part1_result = solve_part1(INPUT);
@@ -15,9 +15,16 @@ fn solve_part1(input: &str) -> i32 {
 }
 
 fn solve_part2(input: &str) -> i32 {
-    let regex = Regex::new("don't|do").unwrap();
-    regex
-        .split_inclusive_left(input)
+    input
+        .split("don't")
+        .enumerate()
+        .flat_map(|(i, part)| {
+            if i == 0 {
+                vec![part]
+            } else {
+                part.split("do").skip(1).collect()
+            }
+        })
         .filter(|line| !line.starts_with("don't"))
         .map(do_mul)
         .sum()
